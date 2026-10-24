@@ -8,6 +8,21 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      corePlugins: {
+        preflight: false,
+      },
+      theme: {
+        extend: {
+          colors: {
+            brand: '#1d4ed8',
+          }
+        }
+      }
+    };
+  </script>
   <style>
     :root {
       --bg: #f8f7f4;
@@ -764,26 +779,266 @@
         </div>
       </div>
 
-      <div class="filter-strip">
-        <div class="filter-btns" id="scoreFilterBtns">
-          <button class="filter-btn active" onclick="filterScoreTable('All', this)">All 30 Prompts</button>
-          <button class="filter-btn" onclick="filterScoreTable('Reasoning & Math', this)">Reasoning &amp; Math</button>
-          <button class="filter-btn" onclick="filterScoreTable('Factual Accuracy', this)">Factual Accuracy</button>
-          <button class="filter-btn" onclick="filterScoreTable('Instruction Following', this)">Instruction Following</button>
-          <button class="filter-btn" onclick="filterScoreTable('Coding & Algorithms', this)">Coding &amp; Algorithms</button>
-          <button class="filter-btn" onclick="filterScoreTable('Indian Languages', this)">Indian Languages</button>
-          <button class="filter-btn" onclick="filterScoreTable('Responsible AI', this)">Responsible AI</button>
+      <!-- SECTION A: INSIGHTS & BEST PERFORMERS SUMMARY SECTION -->
+      <div id="insightsSummarySection" class="mt-8 mb-8">
+        <div class="flex flex-wrap items-end justify-between border-b pb-3 mb-5 gap-3" style="border-color: var(--border-strong);">
+          <div>
+            <div class="font-mono text-xs uppercase tracking-wider font-semibold" style="color: var(--accent);">
+              Evaluation Synthesis // Category Leadership
+            </div>
+            <h3 class="text-2xl font-semibold mt-1 font-serif tracking-tight" style="color: var(--ink);">
+              Insights &amp; Best Performers Summary
+            </h3>
+            <p class="text-xs mt-1 max-w-2xl" style="color: var(--ink-secondary);">
+              Category winners identified across the 30-prompt evaluation battery. Click any card to filter the evaluation table below.
+            </p>
+          </div>
+          <div class="text-xs font-mono px-3 py-1.5 rounded border" style="background: var(--surface-alt); border-color: var(--border); color: var(--ink-secondary);">
+            5 Open-Weight Candidates · Standardized Prompt Suite
+          </div>
         </div>
-        <span style="font-family:var(--mono); font-size:11.5px; color:var(--accent);">Click any row to open evaluator notes &amp; rater breakdown</span>
+
+        <!-- Featured Overall Best Hero Card -->
+        <div class="p-5 rounded-lg border mb-5 transition-all hover:shadow-md cursor-pointer" 
+             style="background: linear-gradient(135deg, rgba(29, 78, 216, 0.05) 0%, rgba(15, 118, 110, 0.06) 100%); border-color: var(--blue);"
+             onclick="filterScoreTableFromCard('All')">
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
+            <div class="flex items-center gap-2">
+              <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-blue-600 text-white text-xs font-bold shadow-sm">
+                ★
+              </span>
+              <span class="font-mono text-xs uppercase tracking-wider font-bold text-blue-700 dark:text-blue-400">
+                Overall Evaluation Leaders · 30-Prompt Benchmark Battery
+              </span>
+            </div>
+            <span class="font-mono text-xs font-semibold px-2.5 py-0.5 rounded bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 border border-blue-200 dark:border-blue-700">
+              Top Tier Overall Accuracy
+            </span>
+          </div>
+          <div class="text-xl md:text-2xl font-bold font-serif mb-2" style="color: var(--ink);">
+            Overall Best: <span class="text-blue-600 dark:text-blue-400">gpt_oss_120b</span> &amp; <span class="text-emerald-600 dark:text-emerald-400">Gemma_4_31B</span>
+          </div>
+          <p class="text-sm leading-relaxed mb-3" style="color: var(--ink-secondary);">
+            <strong>gpt_oss_120b</strong> (141 / 150 · 94.0%) and <strong>Gemma_4_31B</strong> (134 / 150 · 89.3%) dominate across <em>Reasoning &amp; Math</em>, <em>Factual Accuracy</em>, <em>Instruction Following</em>, and <em>Coding &amp; Algorithms</em>. Both models demonstrate superior resistance to false premises, complex multi-constraint compliance, and rigorous mathematical proof step tracking.
+          </p>
+          <div class="flex flex-wrap items-center gap-4 text-xs font-mono" style="color: var(--ink-muted);">
+            <span>• gpt_oss_120b: 117B total / 5.1B active MoE (MXFP4, fits single 80GB GPU)</span>
+            <span>• Gemma_4_31B: 30.7B dense multimodal (256K context, Google AI Studio)</span>
+            <span class="text-blue-600 font-semibold underline">Click to show all 30 prompts ↓</span>
+          </div>
+        </div>
+
+        <!-- 6 Category Winner Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          
+          <!-- Card 1: Reasoning & Math -->
+          <div class="p-4 rounded-lg border transition-all hover:-translate-y-0.5 hover:shadow-md cursor-pointer flex flex-col justify-between"
+               style="background: var(--surface); border-color: var(--border);"
+               onclick="filterScoreTableFromCard('Reasoning & Math')">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="font-mono text-[11px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                  Reasoning &amp; Mathematics
+                </span>
+                <span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">
+                  5 Prompts
+                </span>
+              </div>
+              <h4 class="text-base font-bold font-serif mb-1" style="color: var(--ink);">
+                gpt_oss_120b &amp; Gemma_4_31B
+              </h4>
+              <p class="text-xs leading-relaxed" style="color: var(--ink-secondary);">
+                Tied atop modular arithmetic cycles ($7^{2026} \bmod 100 = 49$) and algorithmic state-space search (River Crossing reverse swap and Knights puzzles).
+              </p>
+            </div>
+            <div class="mt-3 pt-2.5 border-t flex justify-between items-center text-[11px] font-mono" style="border-color: var(--border);">
+              <span class="text-emerald-600 font-semibold">Scores: 24/25 &amp; 23/25</span>
+              <span class="text-blue-600 hover:underline">Filter Table →</span>
+            </div>
+          </div>
+
+          <!-- Card 2: Factual Accuracy -->
+          <div class="p-4 rounded-lg border transition-all hover:-translate-y-0.5 hover:shadow-md cursor-pointer flex flex-col justify-between"
+               style="background: var(--surface); border-color: var(--border);"
+               onclick="filterScoreTableFromCard('Factual Accuracy')">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="font-mono text-[11px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                  Factual Accuracy &amp; Grounding
+                </span>
+                <span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  5 Prompts
+                </span>
+              </div>
+              <h4 class="text-base font-bold font-serif mb-1" style="color: var(--ink);">
+                gpt_oss_120b &amp; Gemma_4_31B
+              </h4>
+              <p class="text-xs leading-relaxed" style="color: var(--ink-secondary);">
+                Decisive rejection of false-premise traps (1893 Trans-Sahara Magnetic Railway) with zero hallucinated sycophancy; accurate technical details on TPU v5e vs Groq LPU memory architecture.
+              </p>
+            </div>
+            <div class="mt-3 pt-2.5 border-t flex justify-between items-center text-[11px] font-mono" style="border-color: var(--border);">
+              <span class="text-emerald-600 font-semibold">Tied: 24/25 (96%)</span>
+              <span class="text-emerald-600 hover:underline">Filter Table →</span>
+            </div>
+          </div>
+
+          <!-- Card 3: Instruction Following -->
+          <div class="p-4 rounded-lg border transition-all hover:-translate-y-0.5 hover:shadow-md cursor-pointer flex flex-col justify-between"
+               style="background: var(--surface); border-color: var(--border);"
+               onclick="filterScoreTableFromCard('Instruction Following')">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="font-mono text-[11px] font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400">
+                  Instruction Following
+                </span>
+                <span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-purple-50 text-purple-700 border border-purple-200">
+                  5 Prompts
+                </span>
+              </div>
+              <h4 class="text-base font-bold font-serif mb-1" style="color: var(--ink);">
+                gpt_oss_120b, Gemma_4_31B &amp; Qwen_3.8_27B
+              </h4>
+              <p class="text-xs leading-relaxed" style="color: var(--ink-secondary);">
+                High compliance on strict raw JSON schema output (zero markdown backtick leakage) and flawless formatting on multi-column perishable goods markdown tables.
+              </p>
+            </div>
+            <div class="mt-3 pt-2.5 border-t flex justify-between items-center text-[11px] font-mono" style="border-color: var(--border);">
+              <span class="text-purple-600 font-semibold">Top Scores: 23–24/25</span>
+              <span class="text-purple-600 hover:underline">Filter Table →</span>
+            </div>
+          </div>
+
+          <!-- Card 4: Coding & Algorithms -->
+          <div class="p-4 rounded-lg border transition-all hover:-translate-y-0.5 hover:shadow-md cursor-pointer flex flex-col justify-between"
+               style="background: var(--surface); border-color: var(--border);"
+               onclick="filterScoreTableFromCard('Coding & Algorithms')">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="font-mono text-[11px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+                  Coding &amp; Algorithms
+                </span>
+                <span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200">
+                  5 Prompts
+                </span>
+              </div>
+              <h4 class="text-base font-bold font-serif mb-1" style="color: var(--ink);">
+                gpt_oss_120b &amp; Qwen_3.8_27B
+              </h4>
+              <p class="text-xs leading-relaxed" style="color: var(--ink-secondary);">
+                <strong>gpt_oss_120b</strong> scored consistent 5s across all code tasks (file leak and type-trap audit in <code>CODE-03</code>). <strong>Qwen 3.8 27B</strong> showed exceptional strength on complex window SQL and in-memory concurrency.
+              </p>
+            </div>
+            <div class="mt-3 pt-2.5 border-t flex justify-between items-center text-[11px] font-mono" style="border-color: var(--border);">
+              <span class="text-indigo-600 font-semibold">gpt_oss_120b: 25/25 (100%)</span>
+              <span class="text-indigo-600 hover:underline">Filter Table →</span>
+            </div>
+          </div>
+
+          <!-- Card 5: Indian Languages -->
+          <div class="p-4 rounded-lg border transition-all hover:-translate-y-0.5 hover:shadow-md cursor-pointer flex flex-col justify-between"
+               style="background: var(--surface); border-color: var(--border); border-left: 3px solid var(--teal);"
+               onclick="filterScoreTableFromCard('Indian Languages')">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="font-mono text-[11px] font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400">
+                  Indian Languages (Indic Suite)
+                </span>
+                <span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-teal-50 text-teal-700 border border-teal-200 font-semibold">
+                  Clear Winner
+                </span>
+              </div>
+              <h4 class="text-base font-bold font-serif mb-1" style="color: var(--ink);">
+                Qwen_3.8_27B (Clear Winner)
+              </h4>
+              <p class="text-xs leading-relaxed" style="color: var(--ink-secondary);">
+                Clear winner across Hindi technical prose, Tamil literary proverbs, Bengali clinical dialogues, Telugu formal notices, and Romanized Hinglish support, benefiting from its native 248K vocabulary.
+              </p>
+            </div>
+            <div class="mt-3 pt-2.5 border-t flex justify-between items-center text-[11px] font-mono" style="border-color: var(--border);">
+              <span class="text-teal-600 font-semibold">Score: 25/25 (100%)</span>
+              <span class="text-teal-600 hover:underline">Filter Table →</span>
+            </div>
+          </div>
+
+          <!-- Card 6: Responsible AI -->
+          <div class="p-4 rounded-lg border transition-all hover:-translate-y-0.5 hover:shadow-md cursor-pointer flex flex-col justify-between"
+               style="background: var(--surface); border-color: var(--border);"
+               onclick="filterScoreTableFromCard('Responsible AI')">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="font-mono text-[11px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+                  Responsible AI &amp; Alignment
+                </span>
+                <span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200">
+                  5 Prompts
+                </span>
+              </div>
+              <h4 class="text-base font-bold font-serif mb-1" style="color: var(--ink);">
+                gpt_oss_120b, Gemma_4_31B &amp; gpt_oss_20b
+              </h4>
+              <p class="text-xs leading-relaxed" style="color: var(--ink-secondary);">
+                Exemplary refusal boundaries on adversarial intranet scrapers, combined with nuanced differentiation of open-source licenses (MIT/GPL/Apache) and critical emergency medical triage.
+              </p>
+            </div>
+            <div class="mt-3 pt-2.5 border-t flex justify-between items-center text-[11px] font-mono" style="border-color: var(--border);">
+              <span class="text-amber-600 font-semibold">Tied Leaders: 24–25/25</span>
+              <span class="text-amber-600 hover:underline">Filter Table →</span>
+            </div>
+          </div>
+
+        </div>
       </div>
 
-      <div class="table-box">
-        <table id="scoreTable">
-          <thead>
-            <tr><th>ID</th><th>Category</th><th>Task Description</th><th>gpt-oss-120b</th><th>Gemma 4 31B</th><th>Qwen 3.8 27B</th><th>Gemma 26B A4B</th><th>gpt-oss-20b</th><th>Audit</th></tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+      <!-- SECTION B: MAIN INTERACTIVE DATA TABLE -->
+      <div id="evaluationTableSection" class="mt-8">
+        <div class="flex flex-wrap items-center justify-between mb-3 gap-2">
+          <div class="flex items-center gap-2">
+            <h3 class="text-lg font-bold font-serif" style="color:var(--ink);">Evaluation Data Matrix</h3>
+            <span id="scoreTableCountBadge" class="font-mono text-xs px-2.5 py-0.5 rounded border" style="background:var(--surface-alt); border-color:var(--border); color:var(--ink);">
+              30 of 30 Prompts
+            </span>
+          </div>
+          <div class="text-xs font-mono" style="color:var(--ink-muted);">
+            Click column headers to sort (▲/▼) · Click rows to view rubric ground truth &amp; verbatim transcripts
+          </div>
+        </div>
+
+        <div class="filter-strip flex flex-wrap items-center justify-between gap-3 p-3 border mb-3" style="background:var(--surface); border-color:var(--border-strong);">
+          <div class="filter-btns flex flex-wrap gap-1.5" id="scoreFilterBtns">
+            <button class="filter-btn active" onclick="filterScoreTable('All', this)">All (30)</button>
+            <button class="filter-btn" onclick="filterScoreTable('Reasoning & Math', this)">Reasoning &amp; Math (5)</button>
+            <button class="filter-btn" onclick="filterScoreTable('Factual Accuracy', this)">Factual Accuracy (5)</button>
+            <button class="filter-btn" onclick="filterScoreTable('Instruction Following', this)">Instruction Following (5)</button>
+            <button class="filter-btn" onclick="filterScoreTable('Coding & Algorithms', this)">Coding (5)</button>
+            <button class="filter-btn" onclick="filterScoreTable('Indian Languages', this)">Indian Languages (5)</button>
+            <button class="filter-btn" onclick="filterScoreTable('Responsible AI', this)">Responsible AI (5)</button>
+          </div>
+          <div class="flex items-center gap-2">
+            <input type="text" id="scoreSearchInput" placeholder="Search prompt ID, title, or task..." oninput="handleScoreSearch(this.value)" style="min-width:250px; padding:6px 10px; font-size:12px; font-family:var(--mono); border:1px solid var(--border-strong); background:var(--bg); color:var(--ink);">
+            <button class="btn" onclick="clearScoreSearch()" title="Clear search">Clear</button>
+          </div>
+        </div>
+
+        <div class="table-box">
+          <table id="scoreTable">
+            <thead>
+              <tr>
+                <th style="cursor:pointer;" onclick="sortScoreTable('id')">Prompt_ID <span id="sort-icon-id">↕</span></th>
+                <th style="cursor:pointer;" onclick="sortScoreTable('cat')">Category <span id="sort-icon-cat">↕</span></th>
+                <th style="cursor:pointer;" onclick="sortScoreTable('title')">Prompt_Title <span id="sort-icon-title">↕</span></th>
+                <th style="cursor:pointer;" onclick="sortScoreTable('gpt-oss-120b')">gpt_oss_120b <span id="sort-icon-gpt-oss-120b">↕</span></th>
+                <th style="cursor:pointer;" onclick="sortScoreTable('Gemma 4 31B')">Gemma_4_31B <span id="sort-icon-Gemma 4 31B">↕</span></th>
+                <th style="cursor:pointer;" onclick="sortScoreTable('Qwen 3.8 27B')">Qwen_3.8_27B <span id="sort-icon-Qwen 3.8 27B">↕</span></th>
+                <th style="cursor:pointer;" onclick="sortScoreTable('Gemma 4 26B A4B')">Gemma_4_26B_A4B <span id="sort-icon-Gemma 4 26B A4B">↕</span></th>
+                <th style="cursor:pointer;" onclick="sortScoreTable('gpt-oss-20b')">gpt_oss_20b <span id="sort-icon-gpt-oss-20b">↕</span></th>
+                <th style="cursor:pointer;" onclick="sortScoreTable('max')">Max_Score <span id="sort-icon-max">↕</span></th>
+                <th>Audit / Evidence</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
       </div>
     </section>
 
@@ -1546,14 +1801,133 @@
     }
 
     let currentScoreCat = 'All';
+    let scoreSearchQuery = '';
+    let scoreSortCol = 'id';
+    let scoreSortAsc = true;
+
+    function handleScoreSearch(query) {
+      scoreSearchQuery = query || '';
+      renderScoreTable(promptsData);
+    }
+
+    function clearScoreSearch() {
+      scoreSearchQuery = '';
+      const inp = document.getElementById('scoreSearchInput');
+      if (inp) inp.value = '';
+      renderScoreTable(promptsData);
+    }
+
+    function sortScoreTable(col) {
+      if (scoreSortCol === col) {
+        scoreSortAsc = !scoreSortAsc;
+      } else {
+        scoreSortCol = col;
+        // Default text columns ascending, numeric/model columns descending
+        scoreSortAsc = (col === 'id' || col === 'cat' || col === 'title');
+      }
+      updateSortHeaderUI();
+      renderScoreTable(promptsData);
+    }
+
+    function updateSortHeaderUI() {
+      const cols = ['id', 'cat', 'title', 'gpt-oss-120b', 'Gemma 4 31B', 'Qwen 3.8 27B', 'Gemma 4 26B A4B', 'gpt-oss-20b', 'max'];
+      cols.forEach(c => {
+        const iconEl = document.getElementById('sort-icon-' + c);
+        if (iconEl) {
+          if (scoreSortCol === c) {
+            iconEl.textContent = scoreSortAsc ? ' ▲' : ' ▼';
+            iconEl.style.color = 'var(--accent)';
+          } else {
+            iconEl.textContent = ' ↕';
+            iconEl.style.color = 'var(--ink-muted)';
+          }
+        }
+      });
+    }
+
+    function filterScoreTableFromCard(cat) {
+      currentScoreCat = cat;
+      document.querySelectorAll('#scoreFilterBtns .filter-btn').forEach(b => {
+        const text = b.textContent;
+        if (cat === 'All' && text.includes('All')) b.classList.add('active');
+        else if (cat !== 'All' && text.includes(cat.split(' ')[0])) b.classList.add('active');
+        else b.classList.remove('active');
+      });
+      renderScoreTable(promptsData);
+      const target = document.getElementById('evaluationTableSection');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
     function renderScoreTable(rows) {
       const tbody = document.querySelector('#scoreTable tbody');
       if (!tbody) return;
 
-      const filtered = rows.filter(p => currentScoreCat === 'All' || p.cat === currentScoreCat);
       const isRef = (currentDataMode === 'reference');
+      const q = (scoreSearchQuery || '').toLowerCase().trim();
 
-      tbody.innerHTML = filtered.map(p => {
+      let list = (rows || promptsData).slice();
+
+      // Filter by category
+      if (currentScoreCat !== 'All') {
+        list = list.filter(p => p.cat === currentScoreCat);
+      }
+
+      // Filter by search query across ID, category, title, prompt text, expected criteria
+      if (q) {
+        list = list.filter(p => (
+          p.id.toLowerCase().includes(q) ||
+          p.cat.toLowerCase().includes(q) ||
+          p.title.toLowerCase().includes(q) ||
+          p.prompt.toLowerCase().includes(q) ||
+          (p.expected && p.expected.toLowerCase().includes(q))
+        ));
+      }
+
+      // Sort
+      list.sort((a, b) => {
+        let valA, valB;
+        if (scoreSortCol === 'id') {
+          valA = a.id; valB = b.id;
+        } else if (scoreSortCol === 'cat') {
+          valA = a.cat; valB = b.cat;
+        } else if (scoreSortCol === 'title') {
+          valA = a.title; valB = b.title;
+        } else if (scoreSortCol === 'max') {
+          valA = 5; valB = 5;
+        } else if (modelKeys.includes(scoreSortCol)) {
+          valA = isRef ? (a.s[scoreSortCol] ?? -1) : (a.v[scoreSortCol] ?? -1);
+          valB = isRef ? (b.s[scoreSortCol] ?? -1) : (b.v[scoreSortCol] ?? -1);
+        } else {
+          valA = a.id; valB = b.id;
+        }
+
+        if (typeof valA === 'string') {
+          return scoreSortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
+        } else {
+          return scoreSortAsc ? (valA - valB) : (valB - valA);
+        }
+      });
+
+      const countBadge = document.getElementById('scoreTableCountBadge');
+      if (countBadge) {
+        countBadge.textContent = `${list.length} of 30 Prompts`;
+      }
+
+      if (list.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="10" style="text-align:center; padding:32px; color:var(--ink-muted);">
+              No prompts match your search query "<strong>${scoreSearchQuery}</strong>" in <strong>${currentScoreCat}</strong>.<br>
+              <button class="btn btn-accent" style="margin-top:10px;" onclick="clearScoreSearch()">Reset Search</button>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = list.map(p => {
         const cells = modelKeys.map(m => {
           const score = isRef ? p.s[m] : p.v[m];
           return `<td>${fmtScore(score, isRef)}</td>`;
@@ -1561,7 +1935,7 @@
 
         const auditCol = p.verified ? 
           `<span style="font-family:var(--mono); font-size:11.5px; color:var(--teal); font-weight:600;">Evidence Logged →</span>` :
-          `<span style="font-family:var(--mono); font-size:11.5px; color:var(--ink-muted);">Log Live Run →</span>`;
+          `<span style="font-family:var(--mono); font-size:11.5px; color:var(--ink-muted);">Inspect / Log →</span>`;
 
         return `
           <tr class="row-interactive" onclick="openPromptModal('${p.id}')">
@@ -1569,6 +1943,7 @@
             <td style="font-family:var(--mono); font-size:12px; color:var(--ink-secondary);">${p.cat}</td>
             <td><strong>${p.title}</strong></td>
             ${cells}
+            <td style="font-family:var(--mono); text-align:center; font-weight:600; color:var(--ink-muted);">5</td>
             <td>${auditCol}</td>
           </tr>
         `;
