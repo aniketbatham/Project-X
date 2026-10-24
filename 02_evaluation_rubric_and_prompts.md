@@ -56,9 +56,9 @@ To ensure empirical validity, repeatable results, and fair testing across both *
   *Prompt*: "In a certain town, 1% of the population has a rare medical condition. A test is 95% accurate (95% true positive rate, 5% false positive rate). A randomly selected citizen tests positive. What is the exact posterior probability that this citizen actually has the condition? Express as a fraction and a percentage rounded to two decimals."
   *Expected Output*: Bayes' Theorem: $P(\text{Cond} \mid +) = \frac{0.01 \times 0.95}{(0.01 \times 0.95) + (0.99 \times 0.05)} = \frac{0.0095}{0.0095 + 0.0495} = \frac{95}{590} = \frac{19}{118} \approx 16.10\%$.
 
-- **`MATH-05` (Algorithmic Logic Puzzle - Knights and Knaves)**:
-  *Prompt*: "On an island, inhabitants are either Knights (always tell the truth) or Knaves (always lie). You meet two inhabitants, A and B. A says: 'At least one of us is a Knave.' What are A and B? Walk through the truth table contradiction step by step."
-  *Expected Output*: A is a Knight, B is a Knave. (If A were a Knave, his statement would be true, which is a contradiction).
+- **`MATH-05` (Algorithmic State-Space Puzzle - River Crossing Trap)**:
+  *Prompt*: "A trader has a monkey, a crate of bananas, and a tiger. He needs to cross a river in a small boat that can only carry himself and one item. If left alone, the tiger will eat the monkey, but monkeys don't eat tigers. The monkey will eat the bananas if left alone with them. Can the trader cross safely? Explain the fastest solution in exactly 4 bullet points."
+  *Expected Output*: Monkey conflicts with both Tiger and Bananas. Trip 1: Take monkey across, return alone. Trip 2: Take bananas across, bring monkey back. Trip 3: Leave monkey, take tiger across, return alone. Trip 4: Take monkey across. Formatted in strictly 4 bullet points.
 
 ---
 
@@ -148,9 +148,10 @@ To ensure empirical validity, repeatable results, and fair testing across both *
   *Prompt*: "Write a short, polite conversation between a doctor and a patient discussing diabetes management in pure Bengali script (বাংলা লিপি). Ensure the doctor uses polite imperatives (আপনি / করবেন)."
   *Expected Output*: Authentic Bengali honorific forms (`আপনি`), proper medical vocabulary, accurate Bengali grammar.
 
-- **`LANG-04` (Telugu Script Translation & Nuance)**:
-  *Prompt*: "Translate the following notice into formal Telugu script (తెలుగు): 'All passengers travelling on the Hyderabad Metro are requested to keep their tickets with them until leaving the destination station. Violators will be subject to a fine.'"
-  *Expected Output*: Accurate Telugu script, formal administrative tone (`ప్రయాణికులకు విజ్ఞప్తి`), correct case markers.
+- **`LANG-04` (Kannada + Hindi Bilingual DPI & Micro-Credit Explanation)**:
+  *Prompt*: "Explain in 2 sentences in Kannada (ಕನ್ನಡ) and 2 sentences in Hindi (हिन्दी) how UPI (Unified Payments Interface) empowers small street vendors in India."
+  *Expected Output*: Accurate Kannada and Devanagari Hindi grammar (2 sentences each) explaining zero-fee QR digital payments and formal credit history for street vendors.
+
 
 - **`LANG-05` (Hinglish Conversational Customer Support)**:
   *Prompt*: "Generate a helpful, empathetic customer support response in Romanized Hinglish (Hindi written in English alphabet) addressing an Indian customer whose UPI transaction failed at a grocery store while their bank account was debited."

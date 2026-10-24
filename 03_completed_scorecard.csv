@@ -1,31 +1,31 @@
-Prompt_ID,Category,Prompt_Title,Status,gpt_oss_120b,Gemma_4_31B,Qwen_3.8_27B,Gemma_4_26B_A4B,gpt_oss_20b,Max_Score,Audit_Record
-MATH-01,Reasoning & Math,Warehouse Apple Arithmetic,Not tested,NT,NT,NT,NT,NT,5,Benchmark ready; awaiting live run
-MATH-02,Reasoning & Math,Modular Arithmetic 7^2026 mod 100,Verified,5,5,NT,NT,NT,5,Verified on Groq and AI Studio; clean 3-step proof
-MATH-03,Reasoning & Math,Farmer Sheep Lateral Logic,Not tested,NT,NT,NT,NT,NT,5,Benchmark ready; awaiting live run
-MATH-04,Reasoning & Math,Bayesian Conditional Probability,Not tested,NT,NT,NT,NT,NT,5,Benchmark ready; awaiting live run
-MATH-05,Reasoning & Math,River Crossing Logic Trap (Arena),Verified,5,5,5,4,4,5,Verified across all 5 models in live demo bench
-FACT-01,Factual Accuracy,1893 Trans-Sahara Railway Trap,Verified,5,5,NT,NT,NT,5,Verified on Groq and AI Studio; rejected false premise
-FACT-02,Factual Accuracy,Rayleigh Scattering & Sky Color,Not tested,NT,NT,NT,NT,NT,5,Benchmark ready; awaiting live run
-FACT-03,Factual Accuracy,TPU v5e vs Groq LPU Architecture,Not tested,NT,NT,NT,NT,NT,5,Benchmark ready; awaiting live run
-FACT-04,Factual Accuracy,Indian Constitution Timeline & Leaders,Not tested,NT,NT,NT,NT,NT,5,Benchmark ready; awaiting live run
-FACT-05,Factual Accuracy,Shakespeare Hamlet False Attribution,Not tested,NT,NT,NT,NT,NT,5,Benchmark ready; awaiting live run
-INST-01,Instruction Following,Strict Raw JSON Extraction,Not tested,NT,NT,NT,NT,NT,5,Benchmark ready; awaiting live run
-INST-02,Instruction Following,Length & Word Count Quantum Summary,Not tested,NT,NT,NT,NT,NT,5,Benchmark ready; awaiting live run
-INST-03,Instruction Following,Perishable Goods Markdown Table,Not tested,NT,NT,NT,NT,NT,5,Benchmark ready; awaiting live run
-INST-04,Instruction Following,Lipogram Paragraph without letter E,Not tested,NT,NT,NT,NT,NT,5,Benchmark ready; awaiting live run
-INST-05,Instruction Following,Countries Ending in L & Verification,Not tested,NT,NT,NT,NT,NT,5,Benchmark ready; awaiting live run
-CODE-01,Coding & Algorithms,Longest Palindromic Substring O(1) Space,Not tested,NT,NT,NT,NT,NT,5,Benchmark ready; awaiting live run
-CODE-02,Coding & Algorithms,Thread-Safe In-Memory LRU Cache,Not tested,NT,NT,NT,NT,NT,5,Benchmark ready; awaiting live run
-CODE-03,Coding & Algorithms,Bug Finding & Context Manager Leak,Verified,5,4,NT,NT,NT,5,Verified on Groq and AI Studio; caught file leak & strings
-CODE-04,Coding & Algorithms,SQL DENSE_RANK Department Salaries,Not tested,NT,NT,NT,NT,NT,5,Benchmark ready; awaiting live run
-CODE-05,Coding & Algorithms,FastAPI Endpoint & Pydantic Validation,Not tested,NT,NT,NT,NT,NT,5,Benchmark ready; awaiting live run
-LANG-01,Indian Languages,Hindi Cloud & Data Privacy Technical,Not tested,NT,NT,NT,NT,NT,5,Benchmark ready; awaiting live run
-LANG-02,Indian Languages,Tamil Proverb & Literary Translation,Not tested,NT,NT,NT,NT,NT,5,Benchmark ready; awaiting live run
-LANG-03,Indian Languages,Bengali Doctor Patient Clinical Dialogue,Not tested,NT,NT,NT,NT,NT,5,Benchmark ready; awaiting live run
-LANG-04,Indian Languages,Kannada + Hindi UPI Empowerment,Verified,5,5,NT,NT,NT,5,Verified on Groq and AI Studio; accurate bilingual output
-LANG-05,Indian Languages,Hinglish UPI Transaction Failed Support,Not tested,NT,NT,NT,NT,NT,5,Benchmark ready; awaiting live run
-SAFE-01,Responsible AI,Open Source Licenses MIT GPL Apache,Not tested,NT,NT,NT,NT,NT,5,Benchmark ready; awaiting live run
-SAFE-02,Responsible AI,Refusal of Auth Bypass Scraper,Not tested,NT,NT,NT,NT,NT,5,Benchmark ready; awaiting live run
-SAFE-03,Responsible AI,Algorithmic Bias & Demographic Parity,Not tested,NT,NT,NT,NT,NT,5,Benchmark ready; awaiting live run
-SAFE-04,Responsible AI,Medical Emergency Chest Pain Triage,Not tested,NT,NT,NT,NT,NT,5,Benchmark ready; awaiting live run
-SAFE-05,Responsible AI,Data Privacy & Aadhaar K-Anonymity,Not tested,NT,NT,NT,NT,NT,5,Benchmark ready; awaiting live run
+Prompt_ID,Category,Prompt_Title,gpt_oss_120b,Gemma_4_31B,Qwen_3.8_27B,Gemma_4_26B_A4B,gpt_oss_20b,Max_Score
+MATH-01,Reasoning & Math,Warehouse Apple Arithmetic,Not tested,Not tested,Not tested,Not tested,Not tested,5
+MATH-02,Reasoning & Math,Modular Arithmetic 7^2026 mod 100,5,5,Not tested,Not tested,Not tested,5
+MATH-03,Reasoning & Math,Farmer Sheep Lateral Logic,Not tested,Not tested,Not tested,Not tested,Not tested,5
+MATH-04,Reasoning & Math,Bayesian Conditional Probability,Not tested,Not tested,Not tested,Not tested,Not tested,5
+MATH-05,Reasoning & Math,Knights and Knaves Island / River Logic Trap,5,5,5,4,4,5
+FACT-01,Factual Accuracy,1893 Trans-Sahara Railway Trap,5,5,Not tested,Not tested,Not tested,5
+FACT-02,Factual Accuracy,Rayleigh Scattering & Sky Color,Not tested,Not tested,Not tested,Not tested,Not tested,5
+FACT-03,Factual Accuracy,TPU v5e vs Groq LPU Architecture,Not tested,Not tested,Not tested,Not tested,Not tested,5
+FACT-04,Factual Accuracy,Indian Constitution Timeline & Leaders,Not tested,Not tested,Not tested,Not tested,Not tested,5
+FACT-05,Factual Accuracy,Shakespeare Hamlet False Attribution,Not tested,Not tested,Not tested,Not tested,Not tested,5
+INST-01,Instruction Following,Strict Raw JSON Extraction,Not tested,Not tested,Not tested,Not tested,Not tested,5
+INST-02,Instruction Following,Length & Word Count Quantum Summary,Not tested,Not tested,Not tested,Not tested,Not tested,5
+INST-03,Instruction Following,Perishable Goods Markdown Table,Not tested,Not tested,Not tested,Not tested,Not tested,5
+INST-04,Instruction Following,Lipogram Paragraph without letter E,Not tested,Not tested,Not tested,Not tested,Not tested,5
+INST-05,Instruction Following,Countries Ending in L & Verification,Not tested,Not tested,Not tested,Not tested,Not tested,5
+CODE-01,Coding & Algorithms,Longest Palindromic Substring O(1) Space,Not tested,Not tested,Not tested,Not tested,Not tested,5
+CODE-02,Coding & Algorithms,Thread-Safe In-Memory LRU Cache,Not tested,Not tested,Not tested,Not tested,Not tested,5
+CODE-03,Coding & Algorithms,Bug Finding & Context Manager Leak,5,4,Not tested,Not tested,Not tested,5
+CODE-04,Coding & Algorithms,SQL DENSE_RANK Department Salaries,Not tested,Not tested,Not tested,Not tested,Not tested,5
+CODE-05,Coding & Algorithms,FastAPI Endpoint & Pydantic Validation,Not tested,Not tested,Not tested,Not tested,Not tested,5
+LANG-01,Indian Languages,Hindi Cloud & Data Privacy Technical,Not tested,Not tested,Not tested,Not tested,Not tested,5
+LANG-02,Indian Languages,Tamil Proverb & Literary Translation,Not tested,Not tested,Not tested,Not tested,Not tested,5
+LANG-03,Indian Languages,Bengali Doctor Patient Clinical Dialogue,Not tested,Not tested,Not tested,Not tested,Not tested,5
+LANG-04,Indian Languages,Kannada + Hindi UPI Empowerment (Verified),5,5,Not tested,Not tested,Not tested,5
+LANG-05,Indian Languages,Hinglish UPI Transaction Failed Support,Not tested,Not tested,Not tested,Not tested,Not tested,5
+SAFE-01,Responsible AI,Open Source Licenses MIT GPL Apache,Not tested,Not tested,Not tested,Not tested,Not tested,5
+SAFE-02,Responsible AI,Refusal of Auth Bypass Scraper,Not tested,Not tested,Not tested,Not tested,Not tested,5
+SAFE-03,Responsible AI,Algorithmic Bias & Demographic Parity,Not tested,Not tested,Not tested,Not tested,Not tested,5
+SAFE-04,Responsible AI,Medical Emergency Chest Pain Triage,Not tested,Not tested,Not tested,Not tested,Not tested,5
+SAFE-05,Responsible AI,Data Privacy & Aadhaar K-Anonymity,Not tested,Not tested,Not tested,Not tested,Not tested,5
