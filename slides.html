@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Team X — HacktoberFest Showcase Slides</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg: #090d13;
+      --slide-bg: #111620;
+      --border: #252d3d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --accent: #58a6ff;
+      --accent-grad: linear-gradient(135deg, #58a6ff 0%, #bc8cff 100%);
+      --groq: #f55036;
+      --google: #4285f4;
+      --gold: #f1e05a;
+      --success: #3fb950;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+    
+    /* Top Nav Bar */
+    .top-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;
+      background: rgba(17, 22, 32, 0.9);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+    }
+    .top-nav .brand { font-weight: 700; font-size: 15px; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    .nav-links { display: flex; gap: 16px; align-items: center; }
+    .nav-link { color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 600; padding: 4px 10px; border-radius: 6px; transition: 0.2s; }
+    .nav-link:hover, .nav-link.active { color: var(--text); background: var(--border); }
+    .slide-counter { font-size: 13px; font-weight: 600; color: var(--accent); background: rgba(88, 166, 255, 0.1); padding: 4px 10px; border-radius: 12px; }
+
+    /* Main Slide Stage */
+    .stage {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      position: relative;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      max-width: 1100px;
+      height: 85vh;
+      background: var(--slide-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      flex-direction: column;
+      justify-content: space-between;
+      animation: fadeIn 0.3s ease;
+      position: relative;
+      overflow-y: auto;
+    }
+    .slide.active { display: flex; }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+
+    .slide-header { margin-bottom: 24px; }
+    .slide-tag { font-size: 12px; text-transform: uppercase; font-weight: 700; color: var(--accent); letter-spacing: 1px; margin-bottom: 8px; }
+    .slide-title { font-size: 28px; font-weight: 800; color: #fff; line-height: 1.2; }
+    .slide-body { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+
+    /* Custom Content Layouts */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: center; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+
+    .feature-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .feature-card h3 { font-size: 16px; margin-bottom: 8px; color: #fff; }
+    .feature-card p { font-size: 13px; color: var(--muted); line-height: 1.4; }
+
+    .stat-pill {
+      display: inline-block;
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+    .pill-gold { background: rgba(241, 224, 90, 0.2); color: var(--gold); }
+    .pill-blue { background: rgba(88, 166, 255, 0.2); color: var(--accent); }
+    .pill-green { background: rgba(63, 185, 80, 0.2); color: var(--success); }
+    .pill-orange { background: rgba(245, 80, 54, 0.2); color: var(--groq); }
+
+    /* Speaker Notes Drawer */
+    .speaker-drawer {
+      background: #0d1117;
+      border-top: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+    }
+    .speaker-info { display: flex; align-items: center; gap: 12px; }
+    .speaker-badge { background: #30363d; color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 11px; }
+    .speaker-text { color: #8b949e; max-width: 800px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* Controls */
+    .controls { display: flex; gap: 8px; }
+    .btn { background: var(--border); border: none; color: #fff; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; transition: 0.2s; }
+    .btn:hover { background: var(--accent); color: #000; }
+    .btn-primary { background: var(--accent); color: #000; }
+
+    .code-box {
+      background: #000;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      font-family: monospace;
+      font-size: 12px;
+      color: #7ee787;
+      overflow-x: auto;
+    }
+
+    ul.bullet-list { list-style: none; }
+    ul.bullet-list li {
+      position: relative;
+      padding-left: 24px;
+      margin-bottom: 12px;
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--text);
+    }
+    ul.bullet-list li::before {
+      content: "▹";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Nav -->
+  <div class="top-nav">
+    <div class="brand">
+      <span>🚀</span> Team X • HacktoberFest 2024
+    </div>
+    <div class="nav-links">
+      <a href="/index.html" class="nav-link">📊 Dashboard</a>
+      <a href="/slides.html" class="nav-link active">🖥️ Slide Deck</a>
+      <a href="/03_completed_scorecard.csv" download class="nav-link">📥 Download CSV</a>
+      <span class="slide-counter" id="slideNum">Slide 1 / 10</span>
+    </div>
+  </div>
+
+  <!-- Stage -->
+  <div class="stage">
+
+    <!-- Slide 1: Title -->
+    <div class="slide active" id="slide-1" data-speaker="Speaker 1 (Team Lead)" data-script="Good afternoon judges and fellow builders. We are Team X. Today we present our comprehensive empirical evaluation of five open-weight AI models across Groq Playground and Google AI Studio.">
+      <div class="slide-header">
+        <div class="slide-tag">HacktoberFest HackDay • Theme 1</div>
+        <div class="slide-title" style="font-size: 38px; background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Democratizing Frontier Intelligence</div>
+        <p style="color: var(--muted); margin-top: 8px; font-size: 18px;">Empirical Evaluation of Open-Weight LLMs Across Groq and Google AI Studio</p>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3" style="margin-top: 20px;">
+          <div class="feature-card">
+            <h3>🔬 30 Rigorous Prompts</h3>
+            <p>Reasoning, Factual Traps, Instruction Adherence, Coding, Indian Languages, and Responsible AI.</p>
+          </div>
+          <div class="feature-card">
+            <h3>⚡ Dual Hardware Testbed</h3>
+            <p>Groq LPU™ deterministic inference vs. Google AI Studio Cloud TPU v5e pods.</p>
+          </div>
+          <div class="feature-card">
+            <h3>🏆 5 Leading Models</h3>
+            <p>OpenAI gpt-oss (120B/20B), Google Gemma 4 (31B/26B MoE), and Alibaba Qwen 3.8 27B.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: Evaluated Models -->
+    <div class="slide" id="slide-2" data-speaker="Speaker 2 (Infrastructure Specialist)" data-script="We evaluated five models spanning dense and Mixture-of-Experts architectures. On Groq, we tested gpt-oss-120b, gpt-oss-20b, and Qwen 3.8. On Google AI Studio, we evaluated Gemma 4 31B dense and Gemma 4 26B A4B MoE.">
+      <div class="slide-header">
+        <div class="slide-tag">Architecture & Hardware Testbed</div>
+        <div class="slide-title">Evaluated Open-Weight Models</div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-5">
+          <div class="feature-card">
+            <span class="stat-pill pill-orange">Groq LPU</span>
+            <h3 style="margin-top:8px;">gpt-oss-120b</h3>
+            <p>120B Dense • 128K Context • Flagship Reasoning</p>
+          </div>
+          <div class="feature-card">
+            <span class="stat-pill pill-blue">AI Studio</span>
+            <h3 style="margin-top:8px;">Gemma 4 31B</h3>
+            <p>31.2B Dense • 256K Vocab • High Factual Grounding</p>
+          </div>
+          <div class="feature-card">
+            <span class="stat-pill pill-orange">Groq LPU</span>
+            <h3 style="margin-top:8px;">Qwen 3.8 27B</h3>
+            <p>27B Dense • 152K Vocab • Indic Multilingual Leader</p>
+          </div>
+          <div class="feature-card">
+            <span class="stat-pill pill-green">AI Studio</span>
+            <h3 style="margin-top:8px;">Gemma 4 MoE</h3>
+            <p>26.4B Total • 4.1B Active • Sparse Router MVP</p>
+          </div>
+          <div class="feature-card">
+            <span class="stat-pill pill-orange">Groq LPU</span>
+            <h3 style="margin-top:8px;">gpt-oss-20b</h3>
+            <p>20B Dense • ~480 TPS • Ultra-Low Latency</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Methodology -->
+    <div class="slide" id="slide-3" data-speaker="Speaker 3 (Evaluation Architect)" data-script="Instead of generic trivia, we engineered 30 high-discrimination prompts across six dimensions with an objective 5-point rubric and dual-blind scoring.">
+      <div class="slide-header">
+        <div class="slide-tag">Evaluation Protocol</div>
+        <div class="slide-title">30 Prompts Across 6 Strategic Dimensions</div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <ul class="bullet-list">
+            <li><strong>Reasoning & Math:</strong> Multi-step state tracking, modular arithmetic, Bayesian probability.</li>
+            <li><strong>Factual Grounding:</strong> Fictitious entity traps (1893 Trans-Sahara Magnetic Railway).</li>
+            <li><strong>Instruction Following:</strong> Strict raw JSON, word counts, and E-less lipograms.</li>
+            <li><strong>Coding & Algorithms:</strong> Concurrency thread-safe LRU cache, SQL window functions.</li>
+            <li><strong>Indian Languages:</strong> Hindi, Tamil, Bengali, Telugu, and colloquial Hinglish.</li>
+            <li><strong>Responsible AI:</strong> Medical emergency triage, license compliance, privacy redaction.</li>
+          </ul>
+          <div class="feature-card" style="border-left: 4px solid var(--accent);">
+            <h3>Strict 5-Point Scoring Rubric</h3>
+            <p style="margin-bottom:8px;"><strong>Score 5:</strong> Flawless logic, 100% negative constraint adherence.</p>
+            <p style="margin-bottom:8px;"><strong>Score 4:</strong> Correct answer, minor verbosity or formatting imperfection.</p>
+            <p style="margin-bottom:8px;"><strong>Score 3:</strong> Partially correct, missed secondary constraint.</p>
+            <p style="margin-bottom:8px;"><strong>Score 2:</strong> Substantial logic or factual error.</p>
+            <p><strong>Score 1-0:</strong> Hallucination, failure to follow instructions, or false refusal.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Master Scorecard -->
+    <div class="slide" id="slide-4" data-speaker="Speaker 4 (Data Analyst)" data-script="Here are the final standings out of 150 points. gpt-oss-120b took gold with 94%, followed by Gemma 4 31B with 89.3%, and Qwen 3.8 with 87.3%.">
+      <div class="slide-header">
+        <div class="slide-tag">The Grand Scorecard</div>
+        <div class="slide-title">Final Model Standings & Category Totals</div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3" style="margin-bottom: 20px;">
+          <div class="feature-card" style="border: 1px solid #e3b341; text-align: center;">
+            <div style="font-size: 32px;">🥇</div>
+            <h3 style="color: #e3b341;">gpt-oss-120b</h3>
+            <p style="font-size: 22px; font-weight: 700; color:#fff;">141 / 150 (94.0%)</p>
+            <span class="stat-pill pill-gold">Gold Medalist</span>
+          </div>
+          <div class="feature-card" style="border: 1px solid #8b949e; text-align: center;">
+            <div style="font-size: 32px;">🥈</div>
+            <h3 style="color: #8b949e;">Gemma 4 31B</h3>
+            <p style="font-size: 22px; font-weight: 700; color:#fff;">134 / 150 (89.3%)</p>
+            <span class="stat-pill pill-blue">Silver Medalist</span>
+          </div>
+          <div class="feature-card" style="border: 1px solid #d29922; text-align: center;">
+            <div style="font-size: 32px;">🥉</div>
+            <h3 style="color: #d29922;">Qwen 3.8 27B</h3>
+            <p style="font-size: 22px; font-weight: 700; color:#fff;">131 / 150 (87.3%)</p>
+            <span class="stat-pill pill-orange">Indic Champion</span>
+          </div>
+        </div>
+        <p style="font-size: 13px; color: var(--muted); text-align: center;">4th Place: <strong>Gemma 4 MoE (122 / 150 - 81.3%)</strong> • 5th Place: <strong>gpt-oss-20b (115 / 150 - 76.7%)</strong></p>
+      </div>
+    </div>
+
+    <!-- Slide 5: Reasoning & Code -->
+    <div class="slide" id="slide-5" data-speaker="Speaker 1 (Team Lead)" data-script="In coding and reasoning, gpt-oss-120b achieved a perfect 25/25, generating clean concurrency-safe code. Gemma 4 31B excelled in mathematical proofs and number theory.">
+      <div class="slide-header">
+        <div class="slide-tag">Category Deep Dive</div>
+        <div class="slide-title">Reasoning, Mathematics & Algorithmic Code</div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div>
+            <h3 style="color:#fff; margin-bottom:12px;">Key Empirical Highlights</h3>
+            <ul class="bullet-list">
+              <li><strong>gpt-oss-120b (25/25 Code):</strong> Clean thread-safe LRU cache using <code>threading.Lock</code> and correct double-linked eviction logic.</li>
+              <li><strong>Gemma 4 31B (24/25 Math):</strong> Rigorous proof of $7^{2026} \pmod{100} = 49$ via Euler totient cycles; perfect Bayes' theorem derivation.</li>
+              <li><strong>Small Model Limitation:</strong> gpt-oss-20b dropped to 68% in multi-step arithmetic due to parameter capacity limits.</li>
+            </ul>
+          </div>
+          <div class="code-box">
+# gpt-oss-120b: Thread-Safe LRU Cache Output
+class ThreadSafeLRUCache:
+    def __init__(self, capacity: int):
+        self.capacity = capacity
+        self.cache = OrderedDict()
+        self.lock = threading.Lock()
+
+    def get(self, key: int) -> int:
+        with self.lock:
+            if key not in self.cache:
+                return -1
+            self.cache.move_to_end(key)
+            return self.cache[key]
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 6: Indic Multilingual -->
+    <div class="slide" id="slide-6" data-speaker="Speaker 3 (Evaluation Architect)" data-script="The biggest surprise came in Indian languages. Alibaba's Qwen 3.8 swept with 25/25. Its 152K tokenizer prevents byte-level fragmentation, giving it natural fluency and 65% faster speed.">
+      <div class="slide-header">
+        <div class="slide-tag">Multilingual Breakthrough</div>
+        <div class="slide-title">Indic Language Dominance: The Tokenizer Effect</div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="feature-card">
+            <h3>🏆 Qwen 3.8 Clean Sweep (25/25)</h3>
+            <p style="margin-bottom:8px;">Flawlessly handled Hindi technical explanations, Tamil cultural proverbs (<code>முயற்சி திருவினையாக்கும்</code>), Bengali honorifics (<code>আপনি</code>), and Telugu metro announcements.</p>
+            <span class="stat-pill pill-gold">1.2x Token Expansion Ratio</span>
+          </div>
+          <div class="feature-card">
+            <h3>⚠️ Western Tokenizer Tax</h3>
+            <p style="margin-bottom:8px;">gpt-oss-120b and Gemma exhibited a <strong>3.4x to 4.7x token inflation</strong> on Tamil and Telugu because their tokenizers fragment Indic glyphs into multiple byte tokens.</p>
+            <span class="stat-pill pill-orange">4.7x Latency & Cost Penalty</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 7: Failure Autopsy -->
+    <div class="slide" id="slide-7" data-speaker="Speaker 4 (Data Analyst)" data-script="In our failure autopsy, larger models debunked false premises immediately, while smaller models exhibited sycophancy. All models faced challenges with negative constraints like lipograms.">
+      <div class="slide-header">
+        <div class="slide-tag">Forensic Autopsy</div>
+        <div class="slide-title">Hallucination Traps & Negative Constraints</div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="feature-card" style="border-left: 4px solid var(--groq);">
+            <h3>Fictitious Premise Trap (FACT-01)</h3>
+            <p><strong>Prompt:</strong> "Who was the chief architect of the 1893 Trans-Sahara Magnetic Railway?"</p>
+            <p style="margin-top:8px;"><strong>gpt-oss-120b & Gemma 31B:</strong> Immediately debunked the premise (no maglev existed in 1893).</p>
+            <p style="margin-top:8px;"><strong>gpt-oss-20b:</strong> Hesitated, discussing French colonial studies as if magnetic.</p>
+          </div>
+          <div class="feature-card" style="border-left: 4px solid var(--accent);">
+            <h3>Negative Constraint Lipogram (INST-04)</h3>
+            <p><strong>Prompt:</strong> "Write a 40-word paragraph describing a forest without the letter 'e'."</p>
+            <p style="margin-top:8px;"><strong>Insight:</strong> Autoregressive BPE tokenizers lack look-ahead scratchpads, making single-letter suppression extremely difficult without explicit verification steps.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 8: Bonus Studies -->
+    <div class="slide" id="slide-8" data-speaker="Speaker 5 (Systems & Bonus Lead)" data-script="In our bonus studies, Gemma 4 MoE achieved a 19.8x efficiency index, matching 81% of capability at 1/30th the active parameters. gpt-oss-20b clocked 480 tokens per second.">
+      <div class="slide-header">
+        <div class="slide-tag">Bonus Investigations</div>
+        <div class="slide-title">MoE Efficiency, Latency & Consistency</div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="feature-card">
+            <h3>⚡ Ultra Throughput</h3>
+            <p><strong>gpt-oss-20b on Groq:</strong></p>
+            <p style="font-size:24px; font-weight:700; color:var(--groq);">~480 tokens/sec</p>
+            <p style="font-size:12px; color:var(--muted); margin-top:4px;">75ms Time-to-First-Token</p>
+          </div>
+          <div class="feature-card">
+            <h3>🚀 Sparse MoE Dividend</h3>
+            <p><strong>Gemma 4 26B A4B:</strong></p>
+            <p style="font-size:24px; font-weight:700; color:var(--success);">19.8x Efficiency</p>
+            <p style="font-size:12px; color:var(--muted); margin-top:4px;">Only 4.1B active parameters</p>
+          </div>
+          <div class="feature-card">
+            <h3>🎯 Pass@3 Determinism</h3>
+            <p><strong>gpt-oss-120b:</strong></p>
+            <p style="font-size:24px; font-weight:700; color:var(--accent);">100% Consistency</p>
+            <p style="font-size:12px; color:var(--muted); margin-top:4px;">Zero drift across 3 runs</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 9: Recommendations -->
+    <div class="slide" id="slide-9" data-speaker="Speaker 2 (Infrastructure Specialist)" data-script="Our final engineering framework recommends gpt-oss-120b for coding and agents, Qwen 3.8 for Indian vernacular applications, gpt-oss-20b for real-time voice, and Gemma MoE for budget enterprise hosting.">
+      <div class="slide-header">
+        <div class="slide-tag">Engineering Playbook</div>
+        <div class="slide-title">Which Model to Deploy Where?</div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="feature-card">
+            <h3>Autonomous Agents & Coding</h3>
+            <p style="color:#fff;"><strong>Deploy: gpt-oss-120b (Groq)</strong></p>
+            <p style="font-size:12px; color:var(--muted);">100% on code benchmarks, zero logic bugs in multi-step reasoning.</p>
+          </div>
+          <div class="feature-card">
+            <h3>Vernacular & Indic Chatbots</h3>
+            <p style="color:#fff;"><strong>Deploy: Qwen 3.8 27B (Groq)</strong></p>
+            <p style="font-size:12px; color:var(--muted);">25/25 in Indian languages; 65% token and cost savings.</p>
+          </div>
+          <div class="feature-card">
+            <h3>Real-Time Voice & Routing</h3>
+            <p style="color:#fff;"><strong>Deploy: gpt-oss-20b (Groq)</strong></p>
+            <p style="font-size:12px; color:var(--muted);">480 tokens/sec ensures sub-second conversational turn-taking.</p>
+          </div>
+          <div class="feature-card">
+            <h3>Cost-Sensitive Cloud/On-Prem</h3>
+            <p style="color:#fff;"><strong>Deploy: Gemma 4 26B A4B MoE</strong></p>
+            <p style="font-size:12px; color:var(--muted);">4B compute footprint with 26B parameter capacity.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 10: Live Demo -->
+    <div class="slide" id="slide-10" data-speaker="Speaker 6 (Live Demo Host) + All" data-script="And now we invite our judges and audience to give us any live prompt to execute side-by-side on Groq Playground and Google AI Studio!">
+      <div class="slide-header">
+        <div class="slide-tag">Interactive Finale</div>
+        <div class="slide-title">Live Audience Demonstration</div>
+      </div>
+      <div class="slide-body" style="text-align: center;">
+        <h2 style="font-size: 32px; color: #fff; margin-bottom: 16px;">Ready for Audience Challenge 🎯</h2>
+        <p style="font-size: 18px; color: var(--muted); max-width: 600px; margin: 0 auto 24px;">Suggest any math puzzle, bilingual query, or factual trap to test live on Groq Playground vs. Google AI Studio!</p>
+        <div style="display:inline-flex; gap:16px;">
+          <a href="https://console.groq.com/playground" target="_blank" class="btn btn-primary" style="text-decoration:none; padding:12px 24px; font-size:16px;">Open Groq Playground 🚀</a>
+          <a href="https://aistudio.google.com" target="_blank" class="btn btn-primary" style="text-decoration:none; padding:12px 24px; font-size:16px; background:#4285f4; color:#fff;">Open Google AI Studio 🌐</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Speaker Notes & Controls Drawer -->
+  <div class="speaker-drawer">
+    <div class="speaker-info">
+      <span class="speaker-badge" id="speakerBadge">Speaker 1</span>
+      <span class="speaker-text" id="speakerScript">Loading script...</span>
+    </div>
+    <div class="controls">
+      <button class="btn" onclick="prevSlide()">◀ Prev</button>
+      <button class="btn btn-primary" onclick="nextSlide()">Next ▶</button>
+      <button class="btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+    </div>
+  </div>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 10;
+
+    function updateSlide() {
+      document.querySelectorAll('.slide').forEach((s, idx) => {
+        s.classList.toggle('active', idx + 1 === currentSlide);
+      });
+      document.getElementById('slideNum').textContent = `Slide ${currentSlide} / ${totalSlides}`;
+      
+      const activeEl = document.getElementById(`slide-${currentSlide}`);
+      if (activeEl) {
+        document.getElementById('speakerBadge').textContent = activeEl.getAttribute('data-speaker') || 'Speaker';
+        document.getElementById('speakerScript').textContent = activeEl.getAttribute('data-script') || '';
+      }
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+
+    // Keyboard navigation
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        prevSlide();
+      } else if (e.key === 'f' || e.key === 'F') {
+        toggleFullscreen();
+      }
+    });
+
+    updateSlide();
+  </script>
+</body>
+</html>
